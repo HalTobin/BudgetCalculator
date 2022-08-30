@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">BudgetCalculator</string>
+
+    <string name="BUDGET">BUDGET</string>
+    <string name="budget">Budget</string>
+
+    <string name="budget_in_raw">Raw Incomes : </string>
+    <string name="budget_in">Incomes : </string>
+    <string name="budget_out">Outcomes :</string>
+
+    <string name="add_operation">ADD AN OPERATION</string>
+    <string name="new_operation">Add an operation</string>
+
+    <string name="add">ADD</string>
+
+    <string name="add_low">Add</string>
+    <string name="cancel_low">Cancel</string>
+
+    <string name="title">Title</string>
+    <string name="income">Income</string>
+    <string name="outcome">Outcome</string>
+
+    <string name="amount">Amount</string>
+
+    <string name="annual">Annual</string>
+    <string name="monthly">Monthly</string>
+
+    <string name="type">Type</string>
+
+</resources>

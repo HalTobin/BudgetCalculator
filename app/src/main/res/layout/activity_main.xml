@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/main_budget"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/BUDGET"
+        android:textSize="36sp"
+        android:textAlignment="center"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/main_budget_income_raw_line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/budget_in_raw"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/main_budget"/>
+
+    <TextView
+        android:id="@+id/main_budget_income_raw_year"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="0€"
+        android:textSize="28sp"
+        android:textAlignment="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/main_budget_income_raw_month_text"
+        app:layout_constraintTop_toBottomOf="@id/main_budget_income_raw_line"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/main_budget_income_raw_month"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="0€"
+        android:textSize="28sp"
+        android:textAlignment="center"
+        app:layout_constraintStart_toEndOf="@id/main_budget_income_raw_year_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/main_budget_income_raw_line"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/main_budget_income_raw_year_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/annual"
+        android:textAlignment="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/main_budget_income_raw_month_text"
+        app:layout_constraintTop_toBottomOf="@id/main_budget_income_raw_year"/>
+
+    <TextView
+        android:id="@+id/main_budget_income_raw_month_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/monthly"
+        android:textAlignment="center"
+        app:layout_constraintStart_toEndOf="@id/main_budget_income_raw_year_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/main_budget_income_raw_month"/>
+
+    <TextView
+        android:id="@+id/main_budget_income_net_line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/budget_in"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/main_budget_income_raw_year_text"/>
+
+    <TextView
+        android:id="@+id/main_budget_income_net_year"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="0€"
+        android:textSize="28sp"
+        android:textAlignment="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/main_budget_income_net_month_text"
+        app:layout_constraintTop_toBottomOf="@id/main_budget_income_net_line"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/main_budget_income_net_month"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="0€"
+        android:textSize="28sp"
+        android:textAlignment="center"
+        app:layout_constraintStart_toEndOf="@id/main_budget_income_net_year_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/main_budget_income_net_line"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/main_budget_income_net_year_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/annual"
+        android:textAlignment="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/main_budget_income_net_month_text"
+        app:layout_constraintTop_toBottomOf="@id/main_budget_income_net_year"/>
+
+    <TextView
+        android:id="@+id/main_budget_income_net_month_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/monthly"
+        android:textAlignment="center"
+        app:layout_constraintStart_toEndOf="@id/main_budget_income_net_year_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/main_budget_income_net_month"/>
+
+    <TextView
+        android:id="@+id/main_budget_outcome_line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/budget_out"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/main_budget_income_net_year_text"/>
+
+    <TextView
+        android:id="@+id/main_budget_outcome_year"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="0€"
+        android:textSize="28sp"
+        android:textAlignment="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/main_budget_outcome_month_text"
+        app:layout_constraintTop_toBottomOf="@id/main_budget_outcome_line"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/main_budget_outcome_month"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="0€"
+        android:textSize="28sp"
+        android:textAlignment="center"
+        app:layout_constraintStart_toEndOf="@id/main_budget_outcome_year_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/main_budget_outcome_line"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/main_budget_outcome_year_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/annual"
+        android:textAlignment="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/main_budget_outcome_month_text"
+        app:layout_constraintTop_toBottomOf="@id/main_budget_outcome_year"/>
+
+    <TextView
+        android:id="@+id/main_budget_outcome_month_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/monthly"
+        android:textAlignment="center"
+        app:layout_constraintStart_toEndOf="@id/main_budget_outcome_year_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/main_budget_outcome_month"/>
+
+    <Button
+        android:id="@+id/main_budget_add_operation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/add_operation"
+        app:layout_constraintTop_toBottomOf="@id/main_budget_outcome_year_text"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        tools:listitem="@layout/item_operation"
+        app:layout_constraintTop_toBottomOf="@id/main_budget_add_operation"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
