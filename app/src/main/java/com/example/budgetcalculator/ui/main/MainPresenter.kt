@@ -7,10 +7,22 @@ class MainPresenter(
     private val model: MainContract.Model
 ) : MainContract.Presenter {
 
-
-
-    override fun onAddOperationButtonClick() {
-        TODO("Not yet implemented")
+    override fun onAddOperationButtonClick(
+        type: Int,
+        title: String,
+        amount: Float,
+        isIncome: Boolean,
+        isAnnual: Boolean
+    ) {
+        model.insertOperation(
+            Operation(
+                type = type,
+                title = title,
+                amount = amount,
+                isIncome = isIncome,
+                isAnnual = isAnnual
+            )
+        )
     }
 
     override fun onOnOffOperationClick(operation: Operation) {

@@ -21,13 +21,21 @@ interface MainContract {
             fun onFinished(list: List<Operation>)
         }
 
+        fun insertOperation(operation: Operation)
+
         fun getOperations(onFinishedListener: OnFinishedListener?)
     }
 
     interface Presenter {
         // method to be called when
         // the button is clicked
-        fun onAddOperationButtonClick()
+        fun onAddOperationButtonClick(
+            type: Int,
+            title: String,
+            amount: Float,
+            isIncome: Boolean,
+            isAnnual: Boolean
+        )
 
         // method to destroy
         // lifecycle of MainActivity

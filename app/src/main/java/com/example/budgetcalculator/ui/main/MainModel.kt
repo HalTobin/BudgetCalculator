@@ -7,6 +7,10 @@ class MainModel : MainContract.Model {
 
     private val operationsList = listOf<Operation>()
 
+    override fun insertOperation(operation: Operation) {
+        TODO("Not yet implemented")
+    }
+
     override fun getOperations(onFinishedListener: MainContract.Model.OnFinishedListener?) {
         Handler().postDelayed( { onFinishedListener!!.onFinished(operationsList) }, 1200 )
     }

@@ -9,8 +9,12 @@
     <string name="budget_out">Outcomes :</string>
 
     <string name="add_operation">ADD AN OPERATION</string>
+    <string name="new_operation">Add an operation</string>
 
     <string name="add">ADD</string>
+
+    <string name="add_low">Add</string>
+    <string name="cancel_low">Cancel</string>
 
     <string name="title">Title</string>
     <string name="income">Income</string>

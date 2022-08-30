@@ -7,8 +7,8 @@ import androidx.room.PrimaryKey
 data class Operation(
     @PrimaryKey val id: Int? = null,
     var type: Int = OperationType.TYPE_IN_UNDEFINED,
-    var name: String = "",
-    var income: Float = 0f,
+    var title: String = "",
+    var amount: Float = 0f,
     var isIncome: Boolean = true,
     var isAnnual: Boolean = true,
     var isOn: Boolean = true
