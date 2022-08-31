@@ -33,14 +33,18 @@ class ListOperationAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val myOperation = operations[position]
 
-        with(myOperation) {
-            holder.binding.operationTitle.text = title
-            holder.binding.operationAmount.text = amount.toString()
-            holder.binding.operationFreq.text = if (isAnnual) "/y" else "/m"
-            holder.binding.operationAmount.setTextColor(
-                if (isIncome) (ContextCompat.getColor(context, R.color.green))
+        with(holder.binding) {
+            operationTitle.text = myOperation.title
+            operationAmount.text = myOperation.amount.toString()
+            operationFreq.text = if (myOperation.isAnnual) "/y" else "/m"
+            operationAmount.setTextColor(
+                if (myOperation.isIncome) (ContextCompat.getColor(context, R.color.green))
                 else (ContextCompat.getColor(context, R.color.red))
             )
+        }
+
+        holder.itemView.setOnClickListener {
+            mCallback!!.onClick(myOperation)
         }
 
     }
@@ -59,7 +63,7 @@ class ListOperationAdapter(
     )
 
     interface OnItemClick {
-        fun onClick(estateId: Int)
+        fun onClick(operation: Operation)
     }
 
 }

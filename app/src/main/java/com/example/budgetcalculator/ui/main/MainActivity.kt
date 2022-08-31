@@ -47,7 +47,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), MainContract.View, Lis
 
     private fun setUpListeners() {
         binding!!.mainBudgetAddOperation.setOnClickListener {
-            this.showAddEditOperationDialog()
+            this.showAddEditOperationDialog(null)
         }
     }
 
@@ -58,7 +58,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), MainContract.View, Lis
     }
 
     @SuppressLint("InflateParams")
-    fun showAddEditOperationDialog() {
+    fun showAddEditOperationDialog(operation: Operation?) {
+
+        var operationId: Int? = null
 
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
         val dialogLayout = View.inflate(this, R.layout.dialog_add_edit_operation, null)
@@ -68,26 +70,41 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), MainContract.View, Lis
         val isIncomeOrOutcome = dialogLayout.findViewById<SwitchMaterial>(R.id.main_operation_income_or_outcome)
         val isAnnualOrMonthly = dialogLayout.findViewById<SwitchMaterial>(R.id.main_operation_annual_or_monthly)
 
+        if (operation != null) {
+            operationId = operation.id
+            titleText.setText(operation.title)
+            amountText.setText(operation.amount.toString())
+            isIncomeOrOutcome.isChecked = !operation.isIncome
+            isAnnualOrMonthly.isChecked = !operation.isAnnual
+        }
+
         with(builder) {
             setView(dialogLayout)
             setTitle(R.string.new_operation)
 
-            setPositiveButton(R.string.add_low) { dialog, _ ->
+            setPositiveButton(
+                if (operation == null) R.string.add_low
+                else R.string.edit_low
+            ) { dialog, _ ->
                 presenter.onAddOperationButtonClick(
+                    id = operationId,
                     type = 0,
                     title = titleText.text.toString(),
                     amount = amountText.text.toString().toFloat(),
-                    isIncome = !isIncomeOrOutcome.isActivated,
-                    isAnnual = !isAnnualOrMonthly.isActivated
+                    isIncome = !isIncomeOrOutcome.isChecked,
+                    isAnnual = !isAnnualOrMonthly.isChecked
                 )
                 dialog.dismiss()
             }
 
-            setNegativeButton(R.string.cancel_low) { dialog, _ ->
-                dialog.dismiss()
-            }
+            if (operation != null) {
+                setNegativeButton(R.string.delete_low) { dialog, _ ->
+                    presenter.onDeleteOperationButtonClick(operation)
+                    dialog.dismiss()
+                }
 
-            show()
+                show()
+            }
         }
 
     }
@@ -110,8 +127,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), MainContract.View, Lis
         TODO("Not yet implemented")
     }
 
-    override fun onClick(estateId: Int) {
-        TODO("Not yet implemented")
+    override fun onClick(operation: Operation) {
+        showAddEditOperationDialog(operation)
     }
 
 }

@@ -1,9 +1,6 @@
 package com.example.budgetcalculator.data.data_source
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import com.example.budgetcalculator.domain.model.Operation
 import kotlinx.coroutines.flow.Flow
 
@@ -16,7 +13,7 @@ interface OperationDao {
     @Query("SELECT * FROM operation WHERE id = :id")
     fun getOperationById(id: Int): Operation?
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addOperation(operation: Operation): Long
 
     @Delete

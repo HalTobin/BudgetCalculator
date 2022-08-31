@@ -5,13 +5,13 @@ import com.example.budgetcalculator.domain.use_case.operation.OperationUseCases
 import javax.inject.Inject
 
 class MainModel @Inject constructor(
-    private val operationUseCase: OperationUseCases
+    private val operationUseCases: OperationUseCases
 ) : MainContract.Model {
 
-    override suspend fun insertOperation(operation: Operation) {
-        operationUseCase.insertOperationUseCase(operation)
-    }
+    override suspend fun insertOperation(operation: Operation) = operationUseCases.insertOperationUseCase(operation)
 
-    override fun getOperations() = operationUseCase.getOperationsUseCase()
+    override fun getOperations() = operationUseCases.getOperationsUseCase()
+
+    override suspend fun deleteOperation(operation: Operation) = operationUseCases.deleteOperationUseCase(operation)
 
 }

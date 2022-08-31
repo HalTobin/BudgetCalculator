@@ -21,6 +21,7 @@ class MainPresenter @Inject constructor(
     override fun observeOperations(): LiveData<List<Operation>> = model.getOperations().asLiveData()
 
     override fun onAddOperationButtonClick(
+        id: Int?,
         type: Int,
         title: String,
         amount: Float,
@@ -30,6 +31,7 @@ class MainPresenter @Inject constructor(
         launch {
             model.insertOperation(
                 Operation(
+                    id = id,
                     type = type,
                     title = title,
                     amount = amount,
@@ -37,6 +39,12 @@ class MainPresenter @Inject constructor(
                     isAnnual = isAnnual
                 )
             )
+        }
+    }
+
+    override fun onDeleteOperationButtonClick(operation: Operation) {
+        launch {
+            model.deleteOperation(operation)
         }
     }
 
