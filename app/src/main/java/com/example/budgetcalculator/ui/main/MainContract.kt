@@ -1,7 +1,8 @@
 package com.example.budgetcalculator.ui.main
 
+import androidx.lifecycle.LiveData
 import com.example.budgetcalculator.domain.model.Operation
-import com.example.budgetcalculator.domain.use_case.operation.GetOperationUseCase
+import kotlinx.coroutines.flow.Flow
 
 interface MainContract {
 
@@ -14,22 +15,14 @@ interface MainContract {
     }
 
     interface Model {
-        // nested interface to be
-        interface OnFinishedListener {
-            // function to be called
-            // once the Handler of Model class
-            // completes its execution
-            fun onFinished(list: List<Operation>)
-        }
-
         suspend fun insertOperation(operation: Operation)
 
-        fun getOperations(onFinishedListener: OnFinishedListener?)
+        fun getOperations() : Flow<List<Operation>>
     }
 
     interface Presenter {
-        // method to be called when
-        // the button is clicked
+        fun observeOperations() : LiveData<List<Operation>>
+
         fun onAddOperationButtonClick(
             type: Int,
             title: String,
@@ -38,8 +31,6 @@ interface MainContract {
             isAnnual: Boolean
         )
 
-        // method to destroy
-        // lifecycle of MainActivity
         fun onOnOffOperationClick(operation: Operation)
     }
 

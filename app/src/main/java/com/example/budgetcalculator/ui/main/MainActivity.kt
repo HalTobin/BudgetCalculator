@@ -5,16 +5,21 @@ import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.budgetcalculator.R
 import com.example.budgetcalculator.base.BaseActivity
 import com.example.budgetcalculator.databinding.ActivityMainBinding
 import com.example.budgetcalculator.domain.model.Operation
 import com.google.android.material.switchmaterial.SwitchMaterial
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.ArrayList
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : BaseActivity<ActivityMainBinding>(), MainContract.View {
+class MainActivity : BaseActivity<ActivityMainBinding>(), MainContract.View, ListOperationAdapter.OnItemClick {
+
+    private var mAdapter: ListOperationAdapter? = null
 
     @Inject
     lateinit var presenter: MainContract.Presenter
@@ -23,18 +28,32 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), MainContract.View {
         super.onCreate(savedInstanceState)
         setContentView(binding!!.root)
 
-        //presenter = MainPresenter(this, MainModel())
-
-        println("INIT APP")
-
+        setUpAdapter()
         setUpListeners()
+        setUpObservers()
+    }
+
+    private fun setUpAdapter() {
+        mAdapter = ListOperationAdapter(this, ArrayList<Operation>(), this)
+        binding!!.mainBudgetListOperation.layoutManager = LinearLayoutManager(this)
+        binding!!.mainBudgetListOperation.addItemDecoration(
+            DividerItemDecoration(
+                this,
+                DividerItemDecoration.VERTICAL
+            )
+        )
+        binding!!.mainBudgetListOperation.adapter = mAdapter
     }
 
     private fun setUpListeners() {
-        println("CLICK")
         binding!!.mainBudgetAddOperation.setOnClickListener {
-            println("CLICK")
             this.showAddEditOperationDialog()
+        }
+    }
+
+    private fun setUpObservers() {
+        presenter.observeOperations().observe(this) { operations ->
+            displayOperation(operations)
         }
     }
 
@@ -71,19 +90,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), MainContract.View {
             show()
         }
 
-        /*val dialog = Dialog(this)
-        val dialogBinding: DialogAddEditOperationBinding = DialogAddEditOperationBinding.inflate(LayoutInflater.from(this))
-        dialog.setContentView(dialogBinding.root)
-        dialog.show()
-
-        dialogBinding.mainOperationAdd.setOnClickListener {
-            dialog.dismiss()
-        }*/
-
     }
 
     override fun displayOperation(operations: List<Operation>) {
-        TODO("Not yet implemented")
+        mAdapter!!.updateList(operations)
     }
 
     override fun displayValues(values: List<Int>) {
@@ -97,6 +107,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), MainContract.View {
         isIncome: Boolean,
         isAnnual: Boolean
     ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onClick(estateId: Int) {
         TODO("Not yet implemented")
     }
 

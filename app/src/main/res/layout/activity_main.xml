@@ -188,6 +188,7 @@
         app:layout_constraintTop_toBottomOf="@id/main_budget_outcome_year_text"/>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/main_budget_list_operation"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         tools:listitem="@layout/item_operation"

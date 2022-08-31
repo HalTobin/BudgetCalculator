@@ -1,5 +1,7 @@
 package com.example.budgetcalculator.ui.main
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.asLiveData
 import com.example.budgetcalculator.domain.model.Operation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -15,6 +17,8 @@ class MainPresenter @Inject constructor(
 
     private val job = Job()
     override val coroutineContext: CoroutineContext = job + Dispatchers.IO
+
+    override fun observeOperations(): LiveData<List<Operation>> = model.getOperations().asLiveData()
 
     override fun onAddOperationButtonClick(
         type: Int,
