@@ -2,27 +2,28 @@ package com.example.budgetcalculator.ui.main
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
-import android.widget.Switch
-import androidx.core.widget.doAfterTextChanged
 import com.example.budgetcalculator.R
 import com.example.budgetcalculator.base.BaseActivity
 import com.example.budgetcalculator.databinding.ActivityMainBinding
 import com.example.budgetcalculator.domain.model.Operation
+import com.google.android.material.switchmaterial.SwitchMaterial
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(), MainContract.View {
 
-    private lateinit var presenter: MainPresenter
+    @Inject
+    lateinit var presenter: MainContract.Presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding!!.root)
 
-        presenter = MainPresenter(this, MainModel())
+        //presenter = MainPresenter(this, MainModel())
 
         println("INIT APP")
 
@@ -45,8 +46,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), MainContract.View {
 
         val titleText = dialogLayout.findViewById<EditText>(R.id.main_operation_title)
         val amountText = dialogLayout.findViewById<EditText>(R.id.main_operation_amount)
-        val isIncomeOrOutcome = dialogLayout.findViewById<Switch>(R.id.main_operation_income_or_outcome)
-        val isAnnualOrMonthly = dialogLayout.findViewById<Switch>(R.id.main_operation_annual_or_monthly)
+        val isIncomeOrOutcome = dialogLayout.findViewById<SwitchMaterial>(R.id.main_operation_income_or_outcome)
+        val isAnnualOrMonthly = dialogLayout.findViewById<SwitchMaterial>(R.id.main_operation_annual_or_monthly)
 
         with(builder) {
             setView(dialogLayout)

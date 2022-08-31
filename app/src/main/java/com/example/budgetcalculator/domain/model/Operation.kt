@@ -1,9 +1,11 @@
 package com.example.budgetcalculator.domain.model
 
+import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 /** Model for operations, can be an income as well as an outcome **/
 
+@Entity
 data class Operation(
     @PrimaryKey val id: Int? = null,
     var type: Int = OperationType.TYPE_IN_UNDEFINED,
@@ -19,3 +21,5 @@ data class Operation(
     }
 
 }
+
+class InvalidOperationException(message: String) : Exception(message)

@@ -13,11 +13,8 @@ interface OperationDao {
     @Query("SELECT * FROM operation")
     fun getOperations(): Flow<List<Operation>>
 
-    @Query("SELECT * FROM operation WHERE budgetId = :budgetId")
-    fun getOperationsByBudgetId(budgetId: Int): Flow<List<Operation>>
-
     @Query("SELECT * FROM operation WHERE id = :id")
-    fun getOperationById(id: Int): Flow<Operation>
+    fun getOperationById(id: Int): Operation?
 
     @Insert
     suspend fun addOperation(operation: Operation): Long

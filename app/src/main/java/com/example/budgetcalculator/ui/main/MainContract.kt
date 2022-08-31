@@ -1,6 +1,7 @@
 package com.example.budgetcalculator.ui.main
 
 import com.example.budgetcalculator.domain.model.Operation
+import com.example.budgetcalculator.domain.use_case.operation.GetOperationUseCase
 
 interface MainContract {
 
@@ -21,7 +22,7 @@ interface MainContract {
             fun onFinished(list: List<Operation>)
         }
 
-        fun insertOperation(operation: Operation)
+        suspend fun insertOperation(operation: Operation)
 
         fun getOperations(onFinishedListener: OnFinishedListener?)
     }

@@ -10,11 +10,11 @@ class OperationRepositoryImpl(private val dao: OperationDao) : OperationReposito
         return dao.getOperations()
     }
 
-    override suspend fun getOperation(operationId: Int): Flow<Operation> {
+    override suspend fun getOperation(operationId: Int): Operation? {
         return dao.getOperationById(operationId)
     }
 
-    override suspend fun addOperation(operation: Operation): Long {
+    override suspend fun insertOperation(operation: Operation): Long {
         return dao.addOperation(operation)
     }
 
