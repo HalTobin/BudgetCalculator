@@ -2,6 +2,7 @@ package com.example.budgetcalculator.ui.main
 
 import androidx.lifecycle.LiveData
 import com.example.budgetcalculator.domain.model.Operation
+import com.example.budgetcalculator.domain.model.OperationType
 import kotlinx.coroutines.flow.Flow
 
 interface MainContract {
@@ -24,6 +25,8 @@ interface MainContract {
 
     interface Presenter {
         fun observeOperations() : LiveData<List<Operation>>
+
+        fun onChangeIncomeOrOutcome(isIncome: Boolean) : List<OperationType>
 
         fun onAddOperationButtonClick(
             id: Int?,

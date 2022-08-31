@@ -27,5 +27,23 @@
     <string name="monthly">Monthly</string>
 
     <string name="type">Type</string>
+    <string name="type_in_undefined">Others</string>
+    <string name="type_in_salary">Salary</string>
+    <string name="type_in_allowances">Allowances / Help</string>
+    <string name="type_in_pocket">Pocket Money</string>
+    <string name="type_in_dividends">Dividends</string>
+
+    <string name="type_out_undefined">Others</string>
+    <string name="type_out_rent">Rent</string>
+    <string name="type_out_credit">Credit</string>
+    <string name="type_out_internet_phone">Internet / Phone</string>
+    <string name="type_out_investment">Investment</string>
+    <string name="type_out_savings">Savings</string>
+    <string name="type_out_donation">Donation</string>
+    <string name="type_out_subscription">Subscription</string>
+    <string name="type_out_taxes">Taxes</string>
+    <string name="type_out_house">House</string>
+    <string name="type_out_bank">Bank</string>
+    <string name="type_out_shopping">Shopping</string>
 
 </resources>

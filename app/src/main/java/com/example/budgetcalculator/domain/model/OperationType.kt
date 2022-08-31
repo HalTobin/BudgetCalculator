@@ -4,6 +4,7 @@ import com.example.budgetcalculator.R
 
 data class OperationType(
     val id: Int = TYPE_IN_UNDEFINED,
+    val text: Int = R.string.type_in_undefined,
     val drawable: Int = R.drawable.type_undefined,
     val isIncome: Boolean = true
 ) {
@@ -30,26 +31,37 @@ data class OperationType(
         const val TYPE_BANK = 0x20A
         const val TYPE_SHOPPING = 0x20B
 
-        val types = listOf(
-            OperationType(id = TYPE_IN_UNDEFINED, drawable = R.drawable.type_undefined, isIncome = true),
-            OperationType(id = TYPE_SALARY, drawable = R.drawable.type_salary, isIncome = true),
-            OperationType(id = TYPE_ALLOWANCES_HELP, drawable = R.drawable.type_allowances, isIncome = true),
-            OperationType(id = TYPE_POCKET_MONEY, drawable = R.drawable.type_pocket_money, isIncome = true),
-            OperationType(id = TYPE_DIVIDENDS, drawable = R.drawable.type_dividends, isIncome = true),
+        private val types = listOf(
+            OperationType(id = TYPE_IN_UNDEFINED, text = R.string.type_in_undefined, drawable = R.drawable.type_undefined, isIncome = true),
+            OperationType(id = TYPE_SALARY, text = R.string.type_in_salary, drawable = R.drawable.type_salary, isIncome = true),
+            OperationType(id = TYPE_ALLOWANCES_HELP, text = R.string.type_in_allowances, drawable = R.drawable.type_allowances, isIncome = true),
+            OperationType(id = TYPE_POCKET_MONEY, text = R.string.type_in_pocket, drawable = R.drawable.type_pocket_money, isIncome = true),
+            OperationType(id = TYPE_DIVIDENDS, text = R.string.type_in_dividends, drawable = R.drawable.type_dividends, isIncome = true),
 
-            OperationType(id = TYPE_OUT_UNDEFINED, drawable = R.drawable.type_undefined, isIncome = false),
-            OperationType(id = TYPE_RENT, drawable = R.drawable.type_rent, isIncome = false),
-            OperationType(id = TYPE_CREDIT, drawable = R.drawable.type_credit, isIncome = false),
-            OperationType(id = TYPE_INTERNET_PHONE, drawable = R.drawable.type_internet_phone, isIncome = false),
-            OperationType(id = TYPE_INVESTMENT, drawable = R.drawable.type_investment, isIncome = false),
-            OperationType(id = TYPE_SAVINGS, drawable = R.drawable.type_savings, isIncome = false),
-            OperationType(id = TYPE_DONATION, drawable = R.drawable.type_donation, isIncome = false),
-            OperationType(id = TYPE_SUBSCRIPTION, drawable = R.drawable.type_subscription, isIncome = false),
-            OperationType(id = TYPE_TAXES, drawable = R.drawable.type_taxes, isIncome = false),
-            OperationType(id = TYPE_HOUSE, drawable = R.drawable.type_house, isIncome = false),
-            OperationType(id = TYPE_BANK, drawable = R.drawable.type_bank, isIncome = false),
-            OperationType(id = TYPE_SHOPPING, drawable = R.drawable.type_shopping, isIncome = false),
+            OperationType(id = TYPE_OUT_UNDEFINED, text = R.string.type_out_undefined, drawable = R.drawable.type_undefined, isIncome = false),
+            OperationType(id = TYPE_RENT, text = R.string.type_out_rent, drawable = R.drawable.type_rent, isIncome = false),
+            OperationType(id = TYPE_CREDIT, text = R.string.type_out_credit, drawable = R.drawable.type_credit, isIncome = false),
+            OperationType(id = TYPE_INTERNET_PHONE, text = R.string.type_out_internet_phone, drawable = R.drawable.type_internet_phone, isIncome = false),
+            OperationType(id = TYPE_INVESTMENT, text = R.string.type_out_investment, drawable = R.drawable.type_investment, isIncome = false),
+            OperationType(id = TYPE_SAVINGS, text = R.string.type_out_savings, drawable = R.drawable.type_savings, isIncome = false),
+            OperationType(id = TYPE_DONATION, text = R.string.type_out_donation, drawable = R.drawable.type_donation, isIncome = false),
+            OperationType(id = TYPE_SUBSCRIPTION, text = R.string.type_out_subscription, drawable = R.drawable.type_subscription, isIncome = false),
+            OperationType(id = TYPE_TAXES, text = R.string.type_out_taxes, drawable = R.drawable.type_taxes, isIncome = false),
+            OperationType(id = TYPE_HOUSE, text = R.string.type_out_house, drawable = R.drawable.type_house, isIncome = false),
+            OperationType(id = TYPE_BANK, text = R.string.type_out_bank, drawable = R.drawable.type_bank, isIncome = false),
+            OperationType(id = TYPE_SHOPPING, text = R.string.type_out_shopping, drawable = R.drawable.type_shopping, isIncome = false),
         )
+
+        fun getListByIsIncome(isIncome: Boolean) : List<OperationType> {
+            val list = mutableListOf<OperationType>()
+
+            types.forEach {
+                if(it.isIncome == isIncome) list.add(it)
+            }
+
+            return list.toList()
+        }
+
     }
 
 }

@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,13 +13,18 @@ import com.example.budgetcalculator.R
 import com.example.budgetcalculator.base.BaseActivity
 import com.example.budgetcalculator.databinding.ActivityMainBinding
 import com.example.budgetcalculator.domain.model.Operation
+import com.example.budgetcalculator.domain.model.OperationType
 import com.google.android.material.switchmaterial.SwitchMaterial
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.ArrayList
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : BaseActivity<ActivityMainBinding>(), MainContract.View, ListOperationAdapter.OnItemClick {
+class MainActivity :
+    BaseActivity<ActivityMainBinding>(),
+    MainContract.View,
+    ListOperationAdapter.OnItemClick,
+    ListOperationTypeAdapter.OnItemClick {
 
     private var mAdapter: ListOperationAdapter? = null
 
@@ -65,10 +72,25 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), MainContract.View, Lis
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
         val dialogLayout = View.inflate(this, R.layout.dialog_add_edit_operation, null)
 
+        val typeSpinner = dialogLayout.findViewById<AutoCompleteTextView>(R.id.main_operation_type)
         val titleText = dialogLayout.findViewById<EditText>(R.id.main_operation_title)
         val amountText = dialogLayout.findViewById<EditText>(R.id.main_operation_amount)
         val isIncomeOrOutcome = dialogLayout.findViewById<SwitchMaterial>(R.id.main_operation_income_or_outcome)
         val isAnnualOrMonthly = dialogLayout.findViewById<SwitchMaterial>(R.id.main_operation_annual_or_monthly)
+
+        val spinnerAdapter = ListOperationTypeAdapter(
+            this,
+            presenter.onChangeIncomeOrOutcome(!isIncomeOrOutcome.isChecked),
+            this
+        )
+
+        typeSpinner.setAdapter(spinnerAdapter)
+
+        isIncomeOrOutcome.setOnClickListener {
+            spinnerAdapter.updateList(
+                presenter.onChangeIncomeOrOutcome(!isIncomeOrOutcome.isChecked)
+            )
+        }
 
         if (operation != null) {
             operationId = operation.id
@@ -102,9 +124,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), MainContract.View, Lis
                     presenter.onDeleteOperationButtonClick(operation)
                     dialog.dismiss()
                 }
-
-                show()
             }
+
+            show()
         }
 
     }
@@ -127,8 +149,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), MainContract.View, Lis
         TODO("Not yet implemented")
     }
 
+    // Click on an Operation from the RecyclerView of the MainActivity
     override fun onClick(operation: Operation) {
         showAddEditOperationDialog(operation)
+    }
+
+    // Click on an OperationType from the Spinner of the AddEditOperationDialog
+    override fun onClick(operationType: OperationType) {
+        TODO("Not yet implemented")
     }
 
 }
