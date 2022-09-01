@@ -1,9 +1,10 @@
 package com.example.budgetcalculator.domain.model
 
+import android.content.Context
 import com.example.budgetcalculator.R
 
 data class OperationType(
-    val id: Int = TYPE_IN_UNDEFINED,
+    var id: Int = TYPE_IN_UNDEFINED,
     val text: Int = R.string.type_in_undefined,
     val drawable: Int = R.drawable.type_undefined,
     val isIncome: Boolean = true
@@ -31,14 +32,16 @@ data class OperationType(
         const val TYPE_BANK = 0x20A
         const val TYPE_SHOPPING = 0x20B
 
+        val undefinedTextResource = R.string.type_in_undefined
+
         private val types = listOf(
-            OperationType(id = TYPE_IN_UNDEFINED, text = R.string.type_in_undefined, drawable = R.drawable.type_undefined, isIncome = true),
+            OperationType(id = TYPE_IN_UNDEFINED, text = undefinedTextResource, drawable = R.drawable.type_undefined, isIncome = true),
             OperationType(id = TYPE_SALARY, text = R.string.type_in_salary, drawable = R.drawable.type_salary, isIncome = true),
             OperationType(id = TYPE_ALLOWANCES_HELP, text = R.string.type_in_allowances, drawable = R.drawable.type_allowances, isIncome = true),
             OperationType(id = TYPE_POCKET_MONEY, text = R.string.type_in_pocket, drawable = R.drawable.type_pocket_money, isIncome = true),
             OperationType(id = TYPE_DIVIDENDS, text = R.string.type_in_dividends, drawable = R.drawable.type_dividends, isIncome = true),
 
-            OperationType(id = TYPE_OUT_UNDEFINED, text = R.string.type_out_undefined, drawable = R.drawable.type_undefined, isIncome = false),
+            OperationType(id = TYPE_OUT_UNDEFINED, text = undefinedTextResource, drawable = R.drawable.type_undefined, isIncome = false),
             OperationType(id = TYPE_RENT, text = R.string.type_out_rent, drawable = R.drawable.type_rent, isIncome = false),
             OperationType(id = TYPE_CREDIT, text = R.string.type_out_credit, drawable = R.drawable.type_credit, isIncome = false),
             OperationType(id = TYPE_INTERNET_PHONE, text = R.string.type_out_internet_phone, drawable = R.drawable.type_internet_phone, isIncome = false),
@@ -60,6 +63,25 @@ data class OperationType(
             }
 
             return list.toList()
+        }
+
+        fun findIdByTextAndIsIncome(context: Context, text: String, isIncome: Boolean) : Int {
+            var id = 0
+
+            getListByIsIncome(isIncome).forEach { operationType ->
+                val toCompare = context.resources.getString(operationType.text)
+                if (text == toCompare) id = operationType.id
+            }
+
+            return id
+        }
+
+        fun getDrawableByOperationId(id: Int) : Int {
+            var drawable = R.drawable.type_undefined
+            types.forEach { operationType ->
+                if (operationType.id == id) drawable = operationType.drawable
+            }
+            return drawable
         }
 
     }

@@ -6,9 +6,11 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.example.budgetcalculator.R
 import com.example.budgetcalculator.databinding.ItemOperationBinding
 import com.example.budgetcalculator.domain.model.Operation
+import com.example.budgetcalculator.domain.model.OperationType
 
 class ListOperationAdapter(
     context: Context,
@@ -47,8 +49,8 @@ class ListOperationAdapter(
                         else R.color.red
                     }
                 )
-
             )
+            operationImage.load(OperationType.getDrawableByOperationId(myOperation.type))
         }
 
         holder.itemView.setOnClickListener {

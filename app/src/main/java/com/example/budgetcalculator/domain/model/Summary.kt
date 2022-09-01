@@ -11,7 +11,7 @@ data class Summary(
 
     fun setAnnualValues(incomes: Float, outcomes : Float) {
         incomesRawAnnual = incomes
-        incomesRawMonthly = incomesRawAnnual
+        incomesRawMonthly = incomesRawAnnual / 12f
         incomesAnnual = incomes - outcomes
         incomesMonthly = incomesAnnual / 12f
         outcomesAnnual = outcomes

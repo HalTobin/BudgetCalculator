@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import androidx.core.content.ContextCompat
+import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -73,6 +74,7 @@ class MainActivity :
     fun showAddEditOperationDialog(operation: Operation?) {
 
         var operationId: Int? = null
+        var typeId = 0
 
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
         val dialogLayout = View.inflate(this, R.layout.dialog_add_edit_operation, null)
@@ -83,7 +85,15 @@ class MainActivity :
         val isIncomeOrOutcome = dialogLayout.findViewById<SwitchMaterial>(R.id.main_operation_income_or_outcome)
         val isAnnualOrMonthly = dialogLayout.findViewById<SwitchMaterial>(R.id.main_operation_annual_or_monthly)
 
-        val spinnerAdapter = ListOperationTypeAdapter(
+        if (operation != null) {
+            operationId = operation.id
+            titleText.setText(operation.title)
+            amountText.setText(operation.amount.toString())
+            isIncomeOrOutcome.isChecked = !operation.isIncome
+            isAnnualOrMonthly.isChecked = !operation.isAnnual
+        }
+
+        var spinnerAdapter = ListOperationTypeAdapter(
             this,
             presenter.onChangeIncomeOrOutcome(!isIncomeOrOutcome.isChecked),
             this
@@ -92,17 +102,21 @@ class MainActivity :
         typeSpinner.setAdapter(spinnerAdapter)
 
         isIncomeOrOutcome.setOnClickListener {
-            spinnerAdapter.updateList(
-                presenter.onChangeIncomeOrOutcome(!isIncomeOrOutcome.isChecked)
+            spinnerAdapter = ListOperationTypeAdapter(
+                this,
+                presenter.onChangeIncomeOrOutcome(!isIncomeOrOutcome.isChecked),
+                this
             )
+            typeSpinner.setAdapter(spinnerAdapter)
+            typeSpinner.setText(resources.getString(OperationType.undefinedTextResource))
         }
 
-        if (operation != null) {
-            operationId = operation.id
-            titleText.setText(operation.title)
-            amountText.setText(operation.amount.toString())
-            isIncomeOrOutcome.isChecked = !operation.isIncome
-            isAnnualOrMonthly.isChecked = !operation.isAnnual
+        typeSpinner.doAfterTextChanged {
+            typeId = OperationType.findIdByTextAndIsIncome(
+                context = this,
+                text = it.toString(),
+                isIncome = !isIncomeOrOutcome.isChecked
+            )
         }
 
         with(builder) {
@@ -115,7 +129,7 @@ class MainActivity :
             ) { dialog, _ ->
                 presenter.onAddOperationButtonClick(
                     id = operationId,
-                    type = 0,
+                    type = typeId,
                     title = titleText.text.toString(),
                     amount = amountText.text.toString().toFloat(),
                     isIncome = !isIncomeOrOutcome.isChecked,
