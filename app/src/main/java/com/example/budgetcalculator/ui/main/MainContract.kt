@@ -3,6 +3,7 @@ package com.example.budgetcalculator.ui.main
 import androidx.lifecycle.LiveData
 import com.example.budgetcalculator.domain.model.Operation
 import com.example.budgetcalculator.domain.model.OperationType
+import com.example.budgetcalculator.domain.model.Summary
 import kotlinx.coroutines.flow.Flow
 
 interface MainContract {
@@ -10,7 +11,7 @@ interface MainContract {
     interface View {
         fun displayOperation(operations: List<Operation>)
 
-        fun displayValues(values: List<Int>)
+        fun displayValues(values: Summary)
 
         fun insertOperation(type: Int, title: String, amount: Float, isIncome: Boolean, isAnnual: Boolean)
     }

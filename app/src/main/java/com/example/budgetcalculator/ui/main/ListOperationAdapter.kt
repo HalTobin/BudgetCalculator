@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.budgetcalculator.R
 import com.example.budgetcalculator.databinding.ItemOperationBinding
@@ -38,8 +39,15 @@ class ListOperationAdapter(
             operationAmount.text = myOperation.amount.toString()
             operationFreq.text = if (myOperation.isAnnual) "/y" else "/m"
             operationAmount.setTextColor(
-                if (myOperation.isIncome) (ContextCompat.getColor(context, R.color.green))
-                else (ContextCompat.getColor(context, R.color.red))
+                ContextCompat.getColor(
+                    context,
+                    if (!myOperation.isOn) R.color.grey
+                    else {
+                        if (myOperation.isIncome) R.color.green
+                        else R.color.red
+                    }
+                )
+
             )
         }
 
@@ -47,6 +55,10 @@ class ListOperationAdapter(
             mCallback!!.onClick(myOperation)
         }
 
+        holder.itemView.setOnLongClickListener {
+            mCallback!!.onLongClick(myOperation)
+            return@setOnLongClickListener true
+        }
     }
 
     override fun getItemCount(): Int {
@@ -64,6 +76,8 @@ class ListOperationAdapter(
 
     interface OnItemClick {
         fun onClick(operation: Operation)
+
+        fun onLongClick(operation: Operation)
     }
 
 }

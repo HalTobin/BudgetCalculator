@@ -4,20 +4,24 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
-import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.budgetcalculator.R
 import com.example.budgetcalculator.base.BaseActivity
 import com.example.budgetcalculator.databinding.ActivityMainBinding
 import com.example.budgetcalculator.domain.model.Operation
 import com.example.budgetcalculator.domain.model.OperationType
+import com.example.budgetcalculator.domain.model.Summary
 import com.google.android.material.switchmaterial.SwitchMaterial
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.ArrayList
+import java.text.DecimalFormat
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class MainActivity :
@@ -41,7 +45,7 @@ class MainActivity :
     }
 
     private fun setUpAdapter() {
-        mAdapter = ListOperationAdapter(this, ArrayList<Operation>(), this)
+        mAdapter = ListOperationAdapter(this, ArrayList(), this)
         binding!!.mainBudgetListOperation.layoutManager = LinearLayoutManager(this)
         binding!!.mainBudgetListOperation.addItemDecoration(
             DividerItemDecoration(
@@ -49,6 +53,7 @@ class MainActivity :
                 DividerItemDecoration.VERTICAL
             )
         )
+
         binding!!.mainBudgetListOperation.adapter = mAdapter
     }
 
@@ -135,8 +140,29 @@ class MainActivity :
         mAdapter!!.updateList(operations)
     }
 
-    override fun displayValues(values: List<Int>) {
-        TODO("Not yet implemented")
+    override fun displayValues(values: Summary) {
+        val df = DecimalFormat("#.##")
+
+        binding!!.mainBudgetIncomeRawYear.text = df.format(values.incomesRawAnnual)
+        binding!!.mainBudgetIncomeRawMonth.text = df.format(values.incomesRawMonthly)
+
+        binding!!.mainBudgetIncomeNetYear.text = df.format(values.incomesAnnual)
+        binding!!.mainBudgetIncomeNetMonth.text = df.format(values.incomesMonthly)
+
+        if (values.incomesAnnual < 0) setNetIncomesTextColor(R.color.red)
+        else setNetIncomesTextColor(R.color.green)
+
+        binding!!.mainBudgetOutcomeYear.text = df.format(values.outcomesAnnual)
+        binding!!.mainBudgetOutcomeMonth.text = df.format(values.outcomesMonthly)
+    }
+
+    private fun setNetIncomesTextColor(colorId: Int) {
+        binding!!.mainBudgetIncomeNetYear.setTextColor(
+            ContextCompat.getColor(this, colorId)
+        )
+        binding!!.mainBudgetIncomeNetMonth.setTextColor(
+            ContextCompat.getColor(this, colorId)
+        )
     }
 
     override fun insertOperation(
@@ -153,10 +179,16 @@ class MainActivity :
     override fun onClick(operation: Operation) {
         showAddEditOperationDialog(operation)
     }
+    // Long click on an Operation from the RecyclerView of the MainActivity
+    override fun onLongClick(operation: Operation) {
+        presenter.onOnOffOperationClick(operation)
+    }
 
     // Click on an OperationType from the Spinner of the AddEditOperationDialog
     override fun onClick(operationType: OperationType) {
         TODO("Not yet implemented")
     }
+
+
 
 }
