@@ -4,20 +4,22 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.Transformation
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
+import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.budgetcalculator.R
 import com.example.budgetcalculator.base.BaseActivity
 import com.example.budgetcalculator.databinding.ActivityMainBinding
 import com.example.budgetcalculator.domain.model.Operation
 import com.example.budgetcalculator.domain.model.OperationType
 import com.example.budgetcalculator.domain.model.Summary
+import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.switchmaterial.SwitchMaterial
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.DecimalFormat
@@ -35,6 +37,10 @@ class MainActivity :
 
     @Inject
     lateinit var presenter: MainContract.Presenter
+
+    private var currency = "€"
+
+    private var isAnnual = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,6 +68,15 @@ class MainActivity :
         binding!!.mainBudgetAddOperation.setOnClickListener {
             this.showAddEditOperationDialog(null)
         }
+        binding!!.mainAnnualOrMonthButton.addOnButtonCheckedListener { toggleButtonGroup, checkedId, isChecked ->
+            if (isChecked) {
+                when (checkedId) {
+                    R.id.main_annual_toggle -> isAnnual = true
+                    R.id.main_monthly_toggle -> isAnnual = false
+                }
+            }
+            presenter.refreshSummary()
+        }
     }
 
     private fun setUpObservers() {
@@ -76,26 +91,32 @@ class MainActivity :
         var operationId: Int? = null
         var typeId = 0
 
+        var isIncome = true
+        var isAnnual = false
+
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
         val dialogLayout = View.inflate(this, R.layout.dialog_add_edit_operation, null)
 
         val typeSpinner = dialogLayout.findViewById<AutoCompleteTextView>(R.id.main_operation_type)
         val titleText = dialogLayout.findViewById<EditText>(R.id.main_operation_title)
         val amountText = dialogLayout.findViewById<EditText>(R.id.main_operation_amount)
-        val isIncomeOrOutcome = dialogLayout.findViewById<SwitchMaterial>(R.id.main_operation_income_or_outcome)
-        val isAnnualOrMonthly = dialogLayout.findViewById<SwitchMaterial>(R.id.main_operation_annual_or_monthly)
+        val isIncomeOrOutcome = dialogLayout.findViewById<MaterialButtonToggleGroup>(R.id.main_operation_income_or_outcome)
+        val isAnnualOrMonthly = dialogLayout.findViewById<MaterialButtonToggleGroup>(R.id.main_operation_annual_or_monthly)
 
         if (operation != null) {
             operationId = operation.id
             titleText.setText(operation.title)
             amountText.setText(operation.amount.toString())
-            isIncomeOrOutcome.isChecked = !operation.isIncome
-            isAnnualOrMonthly.isChecked = !operation.isAnnual
+
+            isIncome = operation.isIncome
+            isAnnual = operation.isAnnual
+            if (!isIncome) isIncomeOrOutcome.check(R.id.main_operation_outcome_toggle)
+            if (isAnnual) isAnnualOrMonthly.check(R.id.main_operation_annual_toggle)
         }
 
         var spinnerAdapter = ListOperationTypeAdapter(
             this,
-            presenter.onChangeIncomeOrOutcome(!isIncomeOrOutcome.isChecked),
+            presenter.onChangeIncomeOrOutcome(isIncome),
             this
         )
 
@@ -104,18 +125,38 @@ class MainActivity :
         isIncomeOrOutcome.setOnClickListener {
             spinnerAdapter = ListOperationTypeAdapter(
                 this,
-                presenter.onChangeIncomeOrOutcome(!isIncomeOrOutcome.isChecked),
+                presenter.onChangeIncomeOrOutcome(isIncome),
                 this
             )
             typeSpinner.setAdapter(spinnerAdapter)
             typeSpinner.setText(resources.getString(OperationType.undefinedTextResource))
         }
 
+        isIncomeOrOutcome.addOnButtonCheckedListener { toggleButtonGroup, checkedId, isChecked ->
+            if (isChecked) {
+                when (checkedId) {
+                    R.id.main_operation_income_toggle -> isIncome = true
+                    R.id.main_operation_outcome_toggle -> isIncome = false
+                }
+            }
+            presenter.refreshSummary()
+        }
+
+        isAnnualOrMonthly.addOnButtonCheckedListener { toggleButtonGroup, checkedId, isChecked ->
+            if (isChecked) {
+                when (checkedId) {
+                    R.id.main_operation_annual_toggle -> isAnnual = true
+                    R.id.main_operation_monthly_toggle -> isAnnual = false
+                }
+            }
+            presenter.refreshSummary()
+        }
+
         typeSpinner.doAfterTextChanged {
             typeId = OperationType.findIdByTextAndIsIncome(
                 context = this,
                 text = it.toString(),
-                isIncome = !isIncomeOrOutcome.isChecked
+                isIncome = isIncome
             )
         }
 
@@ -132,8 +173,8 @@ class MainActivity :
                     type = typeId,
                     title = titleText.text.toString(),
                     amount = amountText.text.toString().toFloat(),
-                    isIncome = !isIncomeOrOutcome.isChecked,
-                    isAnnual = !isAnnualOrMonthly.isChecked
+                    isIncome = isIncome,
+                    isAnnual = isAnnual
                 )
                 dialog.dismiss()
             }
@@ -155,38 +196,23 @@ class MainActivity :
     }
 
     override fun displayValues(values: Summary) {
-        val df = DecimalFormat("#.##")
-
-        binding!!.mainBudgetIncomeRawYear.text = df.format(values.incomesRawAnnual)
-        binding!!.mainBudgetIncomeRawMonth.text = df.format(values.incomesRawMonthly)
-
-        binding!!.mainBudgetIncomeNetYear.text = df.format(values.incomesAnnual)
-        binding!!.mainBudgetIncomeNetMonth.text = df.format(values.incomesMonthly)
+        binding!!.mainBudgetIncomeRaw.text = values.getValue(Summary.INCOMES_RAW, isAnnual).plus(currency)
+        binding!!.mainBudgetIncomeNet.text = values.getValue(Summary.INCOMES_NET, isAnnual).plus(currency)
 
         if (values.incomesAnnual < 0) setNetIncomesTextColor(R.color.red)
         else setNetIncomesTextColor(R.color.green)
 
-        binding!!.mainBudgetOutcomeYear.text = df.format(values.outcomesAnnual)
-        binding!!.mainBudgetOutcomeMonth.text = df.format(values.outcomesMonthly)
+        binding!!.mainBudgetOutcome.text = values.getValue(Summary.OUTCOMES, isAnnual).plus(currency)
+        binding!!.mainBudgetAside.text = values.getValue(Summary.ASIDE, isAnnual).plus(currency)
     }
 
     private fun setNetIncomesTextColor(colorId: Int) {
-        binding!!.mainBudgetIncomeNetYear.setTextColor(
+        binding!!.mainBudgetIncomeRaw.setTextColor(
             ContextCompat.getColor(this, colorId)
         )
-        binding!!.mainBudgetIncomeNetMonth.setTextColor(
+        binding!!.mainBudgetIncomeNet.setTextColor(
             ContextCompat.getColor(this, colorId)
         )
-    }
-
-    override fun insertOperation(
-        type: Int,
-        title: String,
-        amount: Float,
-        isIncome: Boolean,
-        isAnnual: Boolean
-    ) {
-        TODO("Not yet implemented")
     }
 
     // Click on an Operation from the RecyclerView of the MainActivity
@@ -202,7 +228,5 @@ class MainActivity :
     override fun onClick(operationType: OperationType) {
         TODO("Not yet implemented")
     }
-
-
 
 }

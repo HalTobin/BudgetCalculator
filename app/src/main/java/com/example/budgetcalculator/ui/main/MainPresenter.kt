@@ -21,13 +21,15 @@ class MainPresenter @Inject constructor(
     private val job = Job()
     override val coroutineContext: CoroutineContext = job + Dispatchers.IO
 
+    private val values = Summary()
+
     override fun observeOperations(): LiveData<List<Operation>> {
 
         launch {
             model.getOperations().collect { operations ->
-                val values = Summary()
                 var incomes = 0f
                 var outcomes = 0f
+                var aside = 0f
 
                 operations.forEach { operation ->
                     if (operation.isOn) {
@@ -35,18 +37,21 @@ class MainPresenter @Inject constructor(
                             incomes +=
                                 if (operation.isAnnual) operation.amount
                                 else (operation.amount * 12f)
-                        }
-                        else {
-                            outcomes +=
-                                if (operation.isAnnual) operation.amount
-                                else (operation.amount * 12f)
+                        } else {
+
+                            if (operation.isAnnual) {
+                                outcomes += operation.amount
+                                aside += operation.amount
+                            } else { outcomes = operation.amount * 12f }
+
                         }
                     }
                 }
 
-                values.setAnnualValues(incomes = incomes, outcomes = outcomes)
+                values.setAnnualValues(incomes = incomes, outcomes = outcomes, aside = aside)
 
-                view.displayValues(values)
+                model.setSummary(values)
+                refreshSummary()
             }
         }
 
@@ -90,6 +95,10 @@ class MainPresenter @Inject constructor(
         launch {
             model.insertOperation(operation)
         }
+    }
+
+    override fun refreshSummary() {
+        view.displayValues(model.getValues())
     }
 
 }

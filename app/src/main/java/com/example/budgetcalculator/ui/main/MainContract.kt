@@ -12,8 +12,6 @@ interface MainContract {
         fun displayOperation(operations: List<Operation>)
 
         fun displayValues(values: Summary)
-
-        fun insertOperation(type: Int, title: String, amount: Float, isIncome: Boolean, isAnnual: Boolean)
     }
 
     interface Model {
@@ -22,6 +20,10 @@ interface MainContract {
         fun getOperations() : Flow<List<Operation>>
 
         suspend fun deleteOperation(operation: Operation)
+
+        fun setSummary(summary: Summary)
+
+        fun getValues() : Summary
     }
 
     interface Presenter {
@@ -41,6 +43,8 @@ interface MainContract {
         fun onDeleteOperationButtonClick(operation: Operation)
 
         fun onOnOffOperationClick(operation: Operation)
+
+        fun refreshSummary()
     }
 
 }

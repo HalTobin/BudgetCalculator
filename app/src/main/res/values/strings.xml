@@ -4,9 +4,10 @@
     <string name="BUDGET">BUDGET</string>
     <string name="budget">Budget</string>
 
-    <string name="budget_in_raw">Raw Incomes : </string>
-    <string name="budget_in">Incomes : </string>
+    <string name="budget_in_raw">Raw incomes : </string>
+    <string name="budget_in_net">Net incomes : </string>
     <string name="budget_out">Outcomes :</string>
+    <string name="budget_aside">To put aside :</string>
 
     <string name="add_operation">ADD AN OPERATION</string>
     <string name="new_operation">Add an operation</string>
