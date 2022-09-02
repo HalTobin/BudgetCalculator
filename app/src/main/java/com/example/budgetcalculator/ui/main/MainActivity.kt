@@ -122,9 +122,12 @@ class MainActivity :
 
         typeSpinner.setAdapter(spinnerAdapter)
 
-        isIncomeOrOutcome.setOnClickListener {
-
-        }
+        typeSpinner.setText(
+            resources.getString(
+                if (operation == null) OperationType.undefinedTextResource
+                else OperationType.findTextByTypeAndIsIncome(operation.type, isIncome)
+            )
+        )
 
         isIncomeOrOutcome.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (isChecked) {

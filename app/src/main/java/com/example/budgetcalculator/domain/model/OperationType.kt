@@ -65,6 +65,18 @@ data class OperationType(
             return list.toList()
         }
 
+        fun findTextByTypeAndIsIncome(type: Int, isIncome: Boolean) : Int {
+            var res = 0
+            var listOfTypes = getListByIsIncome(isIncome)
+
+            listOfTypes.forEach { operationType ->
+                val toCompare = operationType.id
+                if (type == toCompare) res = operationType.text
+            }
+
+            return res
+        }
+
         fun findIdByTextAndIsIncome(context: Context, text: String, isIncome: Boolean) : Int {
             var id = 0
 
