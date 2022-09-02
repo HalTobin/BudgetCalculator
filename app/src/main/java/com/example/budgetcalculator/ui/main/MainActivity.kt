@@ -89,7 +89,8 @@ class MainActivity :
     fun showAddEditOperationDialog(operation: Operation?) {
 
         var operationId: Int? = null
-        var typeId = 0
+
+        var typeId = OperationType.TYPE_IN_UNDEFINED
 
         var isIncome = true
         var isAnnual = false
@@ -107,6 +108,7 @@ class MainActivity :
             operationId = operation.id
             titleText.setText(operation.title)
             amountText.setText(operation.amount.toString())
+            typeId = operation.type
 
             isIncome = operation.isIncome
             isAnnual = operation.isAnnual
