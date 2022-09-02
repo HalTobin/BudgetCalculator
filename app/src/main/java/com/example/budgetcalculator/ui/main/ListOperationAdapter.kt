@@ -15,17 +15,20 @@ import com.example.budgetcalculator.domain.model.OperationType
 class ListOperationAdapter(
     context: Context,
     items : List<Operation>,
+    currency : String,
     listener : OnItemClick
 ) : RecyclerView.Adapter<ListOperationAdapter.ViewHolder>() {
 
     private val context: Context
     private var operations: List<Operation>
     private val mCallback: OnItemClick?
+    private val currency: String
 
     init {
         operations = items
         this.context = context
         this.mCallback = listener
+        this.currency = currency
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -38,7 +41,7 @@ class ListOperationAdapter(
 
         with(holder.binding) {
             operationTitle.text = myOperation.title
-            operationAmount.text = myOperation.amount.toString()
+            operationAmount.text = myOperation.amount.toString().plus(currency)
             operationFreq.text = if (myOperation.isAnnual) "/y" else "/m"
             operationAmount.setTextColor(
                 ContextCompat.getColor(

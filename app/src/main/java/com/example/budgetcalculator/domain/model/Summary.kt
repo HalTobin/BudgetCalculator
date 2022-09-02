@@ -25,7 +25,7 @@ data class Summary(
     }
 
     fun getValue(value: Int, isYear: Boolean): String {
-        val df = DecimalFormat("#.##")
+        val df = DecimalFormat("#,###,###.##")
         var amount = 0f
 
         when (value) {
@@ -35,7 +35,7 @@ data class Summary(
             ASIDE -> amount = if (isYear) asideAnnual else asideMonthly
         }
 
-        return df.format(amount)
+        return df.format(amount).replace(",", " ")
     }
 
     companion object {

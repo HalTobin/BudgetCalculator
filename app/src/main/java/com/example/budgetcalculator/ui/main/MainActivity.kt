@@ -52,7 +52,7 @@ class MainActivity :
     }
 
     private fun setUpAdapter() {
-        mAdapter = ListOperationAdapter(this, ArrayList(), this)
+        mAdapter = ListOperationAdapter(this, ArrayList(), currency,this)
         binding!!.mainBudgetListOperation.layoutManager = LinearLayoutManager(this)
         binding!!.mainBudgetListOperation.addItemDecoration(
             DividerItemDecoration(
@@ -68,7 +68,7 @@ class MainActivity :
         binding!!.mainBudgetAddOperation.setOnClickListener {
             this.showAddEditOperationDialog(null)
         }
-        binding!!.mainAnnualOrMonthButton.addOnButtonCheckedListener { toggleButtonGroup, checkedId, isChecked ->
+        binding!!.mainAnnualOrMonthButton.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (isChecked) {
                 when (checkedId) {
                     R.id.main_annual_toggle -> isAnnual = true
@@ -123,6 +123,16 @@ class MainActivity :
         typeSpinner.setAdapter(spinnerAdapter)
 
         isIncomeOrOutcome.setOnClickListener {
+
+        }
+
+        isIncomeOrOutcome.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (isChecked) {
+                when (checkedId) {
+                    R.id.main_operation_income_toggle -> isIncome = true
+                    R.id.main_operation_outcome_toggle -> isIncome = false
+                }
+            }
             spinnerAdapter = ListOperationTypeAdapter(
                 this,
                 presenter.onChangeIncomeOrOutcome(isIncome),
@@ -132,24 +142,13 @@ class MainActivity :
             typeSpinner.setText(resources.getString(OperationType.undefinedTextResource))
         }
 
-        isIncomeOrOutcome.addOnButtonCheckedListener { toggleButtonGroup, checkedId, isChecked ->
-            if (isChecked) {
-                when (checkedId) {
-                    R.id.main_operation_income_toggle -> isIncome = true
-                    R.id.main_operation_outcome_toggle -> isIncome = false
-                }
-            }
-            presenter.refreshSummary()
-        }
-
-        isAnnualOrMonthly.addOnButtonCheckedListener { toggleButtonGroup, checkedId, isChecked ->
+        isAnnualOrMonthly.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (isChecked) {
                 when (checkedId) {
                     R.id.main_operation_annual_toggle -> isAnnual = true
                     R.id.main_operation_monthly_toggle -> isAnnual = false
                 }
             }
-            presenter.refreshSummary()
         }
 
         typeSpinner.doAfterTextChanged {
