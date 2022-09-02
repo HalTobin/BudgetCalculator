@@ -42,7 +42,7 @@ class MainPresenter @Inject constructor(
                             if (operation.isAnnual) {
                                 outcomes += operation.amount
                                 aside += operation.amount
-                            } else { outcomes = operation.amount * 12f }
+                            } else { outcomes += operation.amount * 12f }
 
                         }
                     }
