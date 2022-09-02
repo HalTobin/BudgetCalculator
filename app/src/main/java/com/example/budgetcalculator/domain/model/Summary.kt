@@ -35,7 +35,7 @@ data class Summary(
             ASIDE -> amount = if (isYear) asideAnnual else asideMonthly
         }
 
-        return df.format(amount).replace(",", " ")
+        return df.format(amount)
     }
 
     companion object {
